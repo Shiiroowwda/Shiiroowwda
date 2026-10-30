@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080d19">
-  <meta name="description" content="Shiroows — personal space, projects, and experiments.">
+  <meta name="description" content="Locally — a personal portfolio featuring projects and development.">
   <title>Shiroows — Personal Space</title>
   <style>
     :root {
@@ -73,12 +73,6 @@
     .card h3 { margin: 15px 0 5px; font-size: 1.05rem; }
     .card p { color: var(--muted); font-size: .91rem; margin: 0 0 14px; }
     .tag { display: inline-block; font-size: .74rem; color: #bfdbfe; border: 1px solid rgba(96,165,250,.2); background: rgba(59,130,246,.09); padding: 4px 8px; border-radius: 99px; margin: 3px 4px 0 0; }
-    .playground { display: grid; grid-template-columns: .9fr 1.1fr; gap: 16px; }
-    .controls, .preview-box { border-radius: 20px; padding: 21px; }
-    .controls label { display: block; color: var(--muted); font-size: .86rem; margin: 13px 0 6px; }
-    input[type="color"] { width: 100%; height: 43px; padding: 4px; border: 1px solid var(--line); background: rgba(255,255,255,.06); border-radius: 10px; }
-    .preview { min-height: 210px; height: calc(100% - 50px); display: grid; place-items: center; border-radius: 15px; color: white; font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 10px #0008; transition: background .2s; }
-    pre { white-space: pre-wrap; overflow-wrap: anywhere; color: #bfdbfe; background: rgba(0,0,0,.22); border: 1px solid var(--line); border-radius: 11px; padding: 12px; font-size: .8rem; }
     .about { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .about .card { min-height: 0; }
     footer { padding: 25px 0 40px; border-top: 1px solid rgba(164,203,255,.1); color: var(--muted); font-size: .85rem; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -87,7 +81,7 @@
       .hero { grid-template-columns: 1fr; padding-top: 70px; }
       .profile-card { max-width: 390px; }
       .grid { grid-template-columns: 1fr 1fr; }
-      .playground, .about { grid-template-columns: 1fr; }
+      .about { grid-template-columns: 1fr; }
     }
     @media (max-width: 520px) {
       .wrap { width: min(100% - 26px, 1080px); }
@@ -107,7 +101,7 @@
     <nav class="glass" aria-label="Navigasi utama">
       <a class="brand" href="#home">shiroows<span>.</span></a>
       <div class="navlinks">
-        <a href="#home">Home</a><a href="#projects">Projects</a><a href="#experiments">Experiments</a><a href="#about">About</a>
+        <a href="#home">Home</a><a href="#projects">Projects</a><a href="#about">About</a>
       </div>
     </nav>
   </header>
@@ -115,101 +109,58 @@
   <main class="wrap">
     <section class="hero" id="home">
       <div>
-        <div class="eyebrow">Locally · 2026</div>
-        <h1>A Random<br><span class="shine">Projects?</span></h1>
+        <div class="eyebrow">Personal portfolio · 2026</div>
+        <h1>Building things,<br><span class="shine">one project at a time.</span></h1>
         <p class="lead">Whachu doin' here?</p>
         <div class="actions">
-          <a class="btn primary" href="#projects">My Projects <span aria-hidden="true">↗</span></a>
-          <a class="btn" href="#about">About Me</a>
+          <a class="btn primary" href="#projects">View my projects <span aria-hidden="true">↗</span></a>
+          <a class="btn" href="#about">About me</a>
         </div>
       </div>
       <aside class="profile-card glass">
         <div class="avatar" aria-hidden="true">L.</div>
         <h3 style="margin:0">Locally</h3>
-        <p>i like to experimenting something:)</p>
-        <span class="status"><span class="dot"></span> Developer & Owner Projects</span>
+        <p>Learning, building, and exploring new ideas.</p>
+        <span class="status"><span class="dot"></span> Developer · Project creator</span>
       </aside>
     </section>
 
     <section id="projects">
       <div class="section-head">
-        <div><div class="eyebrow">Selected work</div><h2>Projects</h2></div>
+        <div><div class="eyebrow">What I’m working on</div><h2>Projects</h2></div>
         <p class="sub">Things I'm working on. Some are still in progress.</p>
       </div>
       <div class="grid">
-        <article class="card glass"><div class="icon">⌘</div><h3>Bot Dashboard</h3><p>Dashboard for my personal bot or public bot</p><span class="tag">Bot</span><span class="tag">In progress</span></article>
-        <article class="card glass"><div class="icon">◈</div><h3>Roblox Games (Coming in 2027/2028)</h3><p>News, Tips and announcement from My Roblox Games!</p><span class="tag">Games</span><span class="tag">News</span></article>
-        <article class="card glass"><div class="icon">⌁</div><h3>Random Experiment</h3><p>A test website. This is very useful! (probably:3)</p><span class="tag">Useful (Probably NOT)</span><span class="tag">Soon</span><span class="tag">Test</span></article>
-      </div>
-    </section>
-
-    <section id="experiments">
-      <div class="section-head">
-        <div><div class="eyebrow">Try it out</div><h2>Experiments</h2></div>
-        <p class="sub">A tiny color playground. Change the colors and copy the generated CSS.</p>
-      </div>
-      <div class="playground">
-        <div class="controls glass">
-          <h3 style="margin:0">Gradient playground</h3>
-          <label for="colorA">First color</label><input id="colorA" type="color" value="#2563eb">
-          <label for="colorB">Second color</label><input id="colorB" type="color" value="#38bdf8">
-          <label for="angle">Direction</label>
-          <input id="angle" type="range" min="0" max="360" value="120" style="width:100%;accent-color:#60a5fa">
-          <button class="btn primary" id="copyCss" type="button" style="margin-top:14px;width:100%">Copy CSS</button>
-          <p id="copyStatus" class="muted" aria-live="polite" style="font-size:.8rem;margin-bottom:0"></p>
-        </div>
-        <div class="preview-box glass">
-          <div class="preview" id="preview">Your gradient</div>
-          <pre id="cssOutput">background: linear-gradient(120deg, #2563eb, #38bdf8);</pre>
-        </div>
+        <article class="card glass"><div class="icon">⌘</div><h3>Bot Dashboard</h3><p>A dashboard for managing and monitoring my WhatsApp and Discord bot projects.</p><span class="tag">Bots</span><span class="tag">In progress</span></article>
+        <article class="card glass"><div class="icon">◈</div><h3>Roblox Games</h3><p>Development notes and announcements for the Roblox games I plan to create.</p><span class="tag">Roblox</span><span class="tag">Planned</span></article>
+        <article class="card glass"><div class="icon">⌁</div><h3>Web Projects</h3><p>Small websites and tools built to explore ideas and improve my development skills.</p><span class="tag">Web</span><span class="tag">Planned</span></article>
       </div>
     </section>
 
     <section id="about">
-      <div class="section-head"><div><div class="eyebrow">Information</div><h2>About</h2></div></div>
+      <div class="section-head"><div><div class="eyebrow">A little about me</div><h2>About</h2></div></div>
       <div class="about">
  <article class="card glass">
   <div class="icon">◎</div>
   <h3>About Locally</h3>
   <p>
-    I'm Locally. I'm currently learning how to build websites
-    and bots for WhatsApp and Discord.
+    I'm Locally, a beginner developer learning to build websites
+    and bots for WhatsApp and Discord. I enjoy exploring new ideas
+    and improving my skills through personal projects.
 
-    I still have school and personal things to take care of,
-    so I might not update my projects or this website very often.
-
-    Please be respectful.
+    I also have school and other commitments, so updates may be
+    occasional. Thanks for your understanding, and please be
+    respectful when interacting with me or my work.
   </p>
 </article>
-        <article class="card glass"><div class="icon">↗</div><h3>Discord</h3><p class="muted">Join my discord server to get sneak peeks. you can give me ideas or just chat there!</p><a class="btn" href="https://discord.gg/MS2serV3Vu" target="_blank" rel="noopener noreferrer">Discord Server ↗</a></article>
+        <article class="card glass"><div class="icon">↗</div><h3>Connect on Discord</h3><p class="muted">Join for project previews, suggestions, updates, or casual conversations.</p><a class="btn" href="https://discord.gg/MS2serV3Vu" target="_blank" rel="noopener noreferrer">Visit Discord server ↗</a></article>
       </div>
     </section>
   </main>
 
-  <footer class="wrap"><span>© <span id="year"></span> Shiroows</span><span>Made By Locally.</span></footer>
+  <footer class="wrap"><span>© <span id="year"></span> Shiroows</span><span>Designed and maintained by Locally.</span></footer>
   <script>
-    const colorA = document.querySelector('#colorA');
-    const colorB = document.querySelector('#colorB');
-    const angle = document.querySelector('#angle');
-    const preview = document.querySelector('#preview');
-    const cssOutput = document.querySelector('#cssOutput');
-    const copyStatus = document.querySelector('#copyStatus');
-    function updateGradient() {
-      const css = `background: linear-gradient(${angle.value}deg, ${colorA.value}, ${colorB.value});`;
-      preview.style.background = css.replace('background: ', '').replace(';', '');
-      cssOutput.textContent = css;
-    }
-    [colorA, colorB, angle].forEach(input => input.addEventListener('input', updateGradient));
-    document.querySelector('#copyCss').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(cssOutput.textContent);
-        copyStatus.textContent = 'CSS copied.';
-      } catch {
-        copyStatus.textContent = 'Clipboard unavailable. Select and copy the CSS above.';
-      }
-    });
-    document.querySelector('#year').textContent = new Date().getFullYear();
-    updateGradient();
-  </script>
+    document.querySelector("#year").textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
