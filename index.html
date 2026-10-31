@@ -134,7 +134,9 @@
           <div class="account-menu glass" id="accountMenu" hidden>
             <div class="account-menu-name" id="accountMenuName">Discord account</div>
             <div class="account-menu-handle" id="accountMenuHandle"></div>
-            <button class="btn" id="copyOwnerProfile" type="button">Copy profile for website</button>
+            <button class="btn" id="copyOwnerProfile" type="button">Show profile for website</button>
+            <textarea id="ownerProfileOutput" readonly hidden rows="8" aria-label="Website owner profile data" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;background:#0b1220;color:#dbeafe;border:1px solid #334155;font-size:12px;resize:vertical;"></textarea>
+            <p id="copyInstruction" hidden style="font-size:12px;color:#aabbd0;margin:6px 0 0;">Klik kotak teks, tekan Ctrl+A lalu Ctrl+C.</p>
             <button class="btn" id="discordLogout" type="button" style="margin-top:8px">Log out</button>
             <p class="account-message" id="authMessage" role="status" aria-live="polite"></p>
           </div>
@@ -209,14 +211,14 @@
     // Do not put any OAuth token, Client Secret, or Supabase secret key here.
     const OWNER_PROFILE = {
       displayName: "Locally",
-      username: ".locally.",
+      username: "",
       avatarUrl: "",
       decorationUrl: ""
     };
 
     // Replace only this value with your Supabase Publishable key (sb_publishable_...).
     const SUPABASE_URL = "https://woofpetixocdymxxstsc.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_UsIMS36vcOT8T2lWjpqVhQ_bhGZliud";
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     const loginButton = document.querySelector("#discordLogin");
@@ -229,6 +231,8 @@
     const accountMenuName = document.querySelector("#accountMenuName");
     const accountMenuHandle = document.querySelector("#accountMenuHandle");
     const copyOwnerProfileButton = document.querySelector("#copyOwnerProfile");
+    const ownerProfileOutput = document.querySelector("#ownerProfileOutput");
+    const copyInstruction = document.querySelector("#copyInstruction");
     let currentVisitorProfile = null;
     const OWNER_CACHE_KEY = "shiroows_owner_profile_config";
     const VISITOR_CACHE_KEY = "shiroows_visitor_discord_profile";
@@ -357,20 +361,23 @@
       }
     });
 
-    copyOwnerProfileButton.addEventListener("click", async () => {
-      if (!currentVisitorProfile) return;
+    copyOwnerProfileButton.addEventListener("click", () => {
+      if (!currentVisitorProfile) {
+        setMessage("Discord profile is not available yet. Sign in again.");
+        return;
+      }
       const ownerConfig = `const OWNER_PROFILE = ${JSON.stringify({
         displayName: currentVisitorProfile.global_name || currentVisitorProfile.username || "Locally",
         username: currentVisitorProfile.username || "",
         avatarUrl: currentVisitorProfile.avatarUrl || "",
         decorationUrl: currentVisitorProfile.decorationUrl || ""
       }, null, 2)};`;
-      try {
-        await navigator.clipboard.writeText(ownerConfig);
-        setMessage("Profile config copied. Paste it over the OWNER_PROFILE block in your HTML file.");
-      } catch {
-        setMessage("Clipboard unavailable. Open the site over HTTPS and try again.");
-      }
+      ownerProfileOutput.value = ownerConfig;
+      ownerProfileOutput.hidden = false;
+      copyInstruction.hidden = false;
+      ownerProfileOutput.focus();
+      ownerProfileOutput.select();
+      setMessage("Profile data ready. Press Ctrl+C to copy.");
     });
 
     logoutButton.addEventListener("click", async () => {
