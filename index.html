@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080d19">
-  <meta name="description" content="Locally — a personal portfolio featuring projects and development.">
+  <meta name="description" content="Shiroows — projects, websites, and things built by Locally.">
   <title>Shiroows — Personal Space</title>
   <style>
     :root {
@@ -48,6 +48,18 @@
     .navlinks { display: flex; gap: 7px; flex-wrap: wrap; }
     .navlinks a { color: var(--muted); font-size: .88rem; padding: 7px 11px; border-radius: 10px; transition: .2s; }
     .navlinks a:hover { color: var(--text); background: rgba(96,165,250,.12); }
+    .nav-right { display:flex; align-items:center; gap:14px; }
+    .account-area { position:relative; }
+    .account-login { white-space:nowrap; padding:8px 12px; font-size:.86rem; }
+    .account-trigger { display:flex; align-items:center; gap:9px; padding:5px 10px 5px 6px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text); cursor:pointer; }
+    .account-trigger img { width:30px; height:30px; border-radius:10px; object-fit:cover; }
+    .account-trigger span { max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.86rem; }
+    .account-menu { position:absolute; top:calc(100% + 10px); right:0; width:230px; padding:13px; border-radius:15px; z-index:20; }
+    .account-menu[hidden], .account-trigger[hidden], .account-login[hidden] { display:none; }
+    .account-menu-name { font-weight:700; overflow-wrap:anywhere; }
+    .account-menu-handle { color:var(--muted); font-size:.82rem; overflow-wrap:anywhere; margin:2px 0 12px; }
+    .account-menu .btn { width:100%; }
+    .account-message { font-size:.76rem; color:var(--muted); max-width:230px; overflow-wrap:anywhere; }
     .hero { padding: 100px 0 76px; display: grid; grid-template-columns: 1.35fr .65fr; gap: 34px; align-items: center; }
     .eyebrow { color: #93c5fd; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
     h1 { font-size: clamp(3rem, 8vw, 5.8rem); line-height: .98; letter-spacing: -.075em; margin: 18px 0; }
@@ -60,6 +72,15 @@
     .profile-card { padding: 24px; border-radius: 24px; text-align: center; }
     .avatar { width: 104px; height: 104px; margin: 4px auto 15px; display: grid; place-items: center; border-radius: 30px; font-size: 2.5rem; font-weight: 800; color: #dbeafe; background: linear-gradient(145deg, rgba(96,165,250,.32), rgba(14,165,233,.08)); border: 1px solid rgba(147,197,253,.35); box-shadow: 0 0 45px rgba(59,130,246,.18); }
     .profile-card p { margin: 4px 0; color: var(--muted); }
+
+    .avatar-wrap { width: 142px; height: 142px; margin: 0 auto 12px; position: relative; display: grid; place-items: center; }
+    .avatar { width: 104px; height: 104px; margin: 0; display: grid; place-items: center; border-radius: 30px; font-size: 2.5rem; font-weight: 800; color: #dbeafe; background: linear-gradient(145deg, rgba(96,165,250,.32), rgba(14,165,233,.08)); border: 1px solid rgba(147,197,253,.35); box-shadow: 0 0 45px rgba(59,130,246,.18); }
+    .discord-avatar { width: 104px; height: 104px; object-fit: cover; border-radius: 30px; border: 1px solid rgba(147,197,253,.35); box-shadow: 0 0 45px rgba(59,130,246,.18); }
+    .discord-decoration { position: absolute; width: 142px; height: 142px; object-fit: contain; pointer-events: none; }
+    .profile-actions { display: flex; justify-content: center; gap: 9px; flex-wrap: wrap; margin-top: 16px; }
+    .profile-actions button[hidden], .discord-avatar[hidden], .discord-decoration[hidden], #discordLogout[hidden] { display: none; }
+    .auth-message { min-height: 1.2em; margin-top: 10px !important; font-size: .78rem; overflow-wrap: anywhere; }
+    button:disabled { opacity: .6; cursor: wait; transform: none !important; }
     .status { display: inline-flex; align-items: center; gap: 7px; margin-top: 15px; color: #bfdbfe; font-size: .82rem; padding: 6px 10px; border-radius: 99px; background: rgba(59,130,246,.12); border: 1px solid rgba(96,165,250,.2); }
     .dot { width: 7px; height: 7px; border-radius: 50%; background: #60a5fa; box-shadow: 0 0 12px #60a5fa; }
     section { padding: 30px 0 64px; scroll-margin-top: 100px; }
@@ -86,6 +107,7 @@
     @media (max-width: 520px) {
       .wrap { width: min(100% - 26px, 1080px); }
       nav { align-items: flex-start; flex-direction: column; }
+      .nav-right { width:100%; justify-content:space-between; flex-wrap:wrap; }
       .navlinks { gap: 2px; }
       .navlinks a { padding: 6px 8px; }
       .hero { padding-top: 58px; }
@@ -100,8 +122,23 @@
   <header class="wrap">
     <nav class="glass" aria-label="Navigasi utama">
       <a class="brand" href="#home">shiroows<span>.</span></a>
-      <div class="navlinks">
-        <a href="#home">Home</a><a href="#projects">Projects</a><a href="#about">About</a>
+      <div class="nav-right">
+        <div class="navlinks">
+          <a href="#home">Home</a><a href="#projects">Projects</a><a href="#about">About</a>
+        </div>
+        <div class="account-area">
+          <button class="btn primary account-login" id="discordLogin" type="button">Login with Discord</button>
+          <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" aria-controls="accountMenu" hidden>
+            <img id="accountAvatar" alt=""><span id="accountName">Account</span><span aria-hidden="true">⌄</span>
+          </button>
+          <div class="account-menu glass" id="accountMenu" hidden>
+            <div class="account-menu-name" id="accountMenuName">Discord account</div>
+            <div class="account-menu-handle" id="accountMenuHandle"></div>
+            <button class="btn" id="copyOwnerProfile" type="button">Copy profile for website</button>
+            <button class="btn" id="discordLogout" type="button" style="margin-top:8px">Log out</button>
+            <p class="account-message" id="authMessage" role="status" aria-live="polite"></p>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -109,19 +146,23 @@
   <main class="wrap">
     <section class="hero" id="home">
       <div>
-        <div class="eyebrow">Personal portfolio · 2026</div>
-        <h1>Building things,<br><span class="shine">one project at a time.</span></h1>
-        <p class="lead">Whachu doin' here?</p>
+        <div class="eyebrow">Hey, I’m Locally.</div>
+        <h1>Just making<br><span class="shine">things I enjoy.</span></h1>
+        <p class="lead">I build websites, work on Discord bots, and explore ideas that I find interesting. Take a look around.</p>
         <div class="actions">
-          <a class="btn primary" href="#projects">View my projects <span aria-hidden="true">↗</span></a>
+          <a class="btn primary" href="#projects">My projects <span aria-hidden="true">↗</span></a>
           <a class="btn" href="#about">About me</a>
         </div>
       </div>
-      <aside class="profile-card glass">
-        <div class="avatar" aria-hidden="true">L.</div>
-        <h3 style="margin:0">Locally</h3>
-        <p>Learning, building, and exploring new ideas.</p>
-        <span class="status"><span class="dot"></span> Developer · Project creator</span>
+      <aside class="profile-card glass" aria-label="Website owner profile">
+        <div class="avatar-wrap">
+          <div class="avatar" id="ownerAvatarFallback" aria-hidden="true">L.</div>
+          <img class="discord-avatar" id="ownerDiscordAvatar" alt="Locally's Discord profile picture" hidden>
+          <img class="discord-decoration" id="ownerDiscordDecoration" alt="" aria-hidden="true" hidden>
+        </div>
+        <h3 id="ownerDiscordName" style="margin:0">Locally</h3>
+        <p id="ownerDiscordHandle">Website owner</p>
+        <span class="status"><span class="dot"></span><span>Website owner</span></span>
       </aside>
     </section>
 
@@ -131,9 +172,9 @@
         <p class="sub">Things I'm working on. Some are still in progress.</p>
       </div>
       <div class="grid">
-        <article class="card glass"><div class="icon">⌘</div><h3>Bot Dashboard</h3><p>A dashboard for managing and monitoring my WhatsApp and Discord bot projects.</p><span class="tag">Bots</span><span class="tag">In progress</span></article>
-        <article class="card glass"><div class="icon">◈</div><h3>Roblox Games</h3><p>Development notes and announcements for the Roblox games I plan to create.</p><span class="tag">Roblox</span><span class="tag">Planned</span></article>
-        <article class="card glass"><div class="icon">⌁</div><h3>Web Projects</h3><p>Small websites and tools built to explore ideas and improve my development skills.</p><span class="tag">Web</span><span class="tag">Planned</span></article>
+        <article class="card glass"><div class="icon">⌘</div><h3>Discord Bot Dashboard</h3><p>A dashboard for managing and monitoring Discord bots, with useful tools for bot owners and communities.</p><span class="tag">Discord</span><span class="tag">In progress</span></article>
+        <article class="card glass"><div class="icon">◈</div><h3>Roblox Games</h3><p>A collection of systems and gameplay features that will be developed for my future Roblox games.</p><span class="tag">Luau</span><span class="tag">Roblox Studio</span></article>
+        <article class="card glass"><div class="icon">⌁</div><h3>Web &amp; Tools</h3><p>Small websites, useful tools, and interactive pages made to solve simple problems or try out new ideas.</p><span class="tag">HTML</span><span class="tag">JavaScript</span></article>
       </div>
     </section>
 
@@ -145,7 +186,7 @@
   <h3>About Locally</h3>
   <p>
     I'm Locally, a beginner developer learning to build websites
-    and bots for WhatsApp and Discord. I enjoy exploring new ideas
+    and Discord bots. I enjoy exploring new ideas
     and improving my skills through personal projects.
 
     I also have school and other commitments, so updates may be
@@ -158,9 +199,203 @@
     </section>
   </main>
 
-  <footer class="wrap"><span>© <span id="year"></span> Shiroows</span><span>Designed and maintained by Locally.</span></footer>
+  <footer class="wrap"><span>© <span id="year"></span> Shiroows</span><span>Built with HTML, CSS &amp; JavaScript.</span></footer>
+  <!-- Supabase JavaScript client (browser CDN build) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     document.querySelector("#year").textContent = new Date().getFullYear();
-</script>
+
+    // Public website-owner profile. Fill these values after signing in with your own Discord account.
+    // Do not put any OAuth token, Client Secret, or Supabase secret key here.
+    const OWNER_PROFILE = {
+      displayName: "Locally",
+      username: ".locally.",
+      avatarUrl: "",
+      decorationUrl: ""
+    };
+
+    // Replace only this value with your Supabase Publishable key (sb_publishable_...).
+    const SUPABASE_URL = "https://woofpetixocdymxxstsc.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_UsIMS36vcOT8T2lWjpqVhQ_bhGZliud";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const loginButton = document.querySelector("#discordLogin");
+    const accountTrigger = document.querySelector("#accountTrigger");
+    const accountMenu = document.querySelector("#accountMenu");
+    const logoutButton = document.querySelector("#discordLogout");
+    const authMessage = document.querySelector("#authMessage");
+    const accountAvatar = document.querySelector("#accountAvatar");
+    const accountName = document.querySelector("#accountName");
+    const accountMenuName = document.querySelector("#accountMenuName");
+    const accountMenuHandle = document.querySelector("#accountMenuHandle");
+    const copyOwnerProfileButton = document.querySelector("#copyOwnerProfile");
+    let currentVisitorProfile = null;
+    const OWNER_CACHE_KEY = "shiroows_owner_profile_config";
+    const VISITOR_CACHE_KEY = "shiroows_visitor_discord_profile";
+
+    function setMessage(message = "") { authMessage.textContent = message; }
+
+    function renderOwnerProfile(profile) {
+      const displayName = profile.displayName || profile.global_name || profile.username || "Locally";
+      document.querySelector("#ownerDiscordName").textContent = displayName;
+      document.querySelector("#ownerDiscordHandle").textContent = profile.username ? `@${profile.username}` : "Website owner";
+      const avatar = document.querySelector("#ownerDiscordAvatar");
+      const decoration = document.querySelector("#ownerDiscordDecoration");
+      const fallback = document.querySelector("#ownerAvatarFallback");
+      if (profile.avatarUrl) {
+        avatar.src = profile.avatarUrl;
+        avatar.hidden = false;
+        fallback.hidden = true;
+      } else {
+        avatar.hidden = true;
+        avatar.removeAttribute("src");
+        fallback.textContent = displayName.slice(0, 1).toUpperCase();
+        fallback.hidden = false;
+      }
+      if (profile.decorationUrl) {
+        decoration.src = profile.decorationUrl;
+        decoration.hidden = false;
+      } else {
+        decoration.hidden = true;
+        decoration.removeAttribute("src");
+      }
+    }
+
+    function renderVisitorProfile(profile) {
+      currentVisitorProfile = profile;
+      accountName.textContent = profile.global_name || profile.username || "Discord account";
+      accountMenuName.textContent = profile.global_name || profile.username || "Discord account";
+      accountMenuHandle.textContent = profile.username ? `@${profile.username}` : "Signed in with Discord";
+      accountAvatar.src = profile.avatarUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%233b82f6'/%3E%3Ctext x='20' y='27' text-anchor='middle' font-size='22' fill='white'%3E%3F%3C/text%3E%3C/svg%3E";
+      loginButton.hidden = true;
+      accountTrigger.hidden = false;
+    }
+
+    function renderLoggedOut() {
+      loginButton.hidden = false;
+      loginButton.disabled = false;
+      accountTrigger.hidden = true;
+      accountMenu.hidden = true;
+      accountTrigger.setAttribute("aria-expanded", "false");
+      accountAvatar.removeAttribute("src");
+      setMessage("");
+    }
+
+    async function loadVisitorProfile(providerToken, authUser) {
+      if (providerToken) {
+        try {
+          const response = await fetch("https://discord.com/api/v10/users/@me", {
+            headers: { Authorization: `Bearer ${providerToken}` }
+          });
+          if (!response.ok) throw new Error(`Discord API returned ${response.status}`);
+          const discordUser = await response.json();
+          const avatarUrl = discordUser.avatar
+            ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${discordUser.avatar.startsWith("a_") ? "gif" : "png"}?size=128`
+            : null;
+          const decorationUrl = discordUser.avatar_decoration_data?.asset
+            ? `https://cdn.discordapp.com/avatar-decoration-presets/${encodeURIComponent(discordUser.avatar_decoration_data.asset)}.png?size=256`
+            : null;
+          const profile = {
+            id: discordUser.id,
+            username: discordUser.username,
+            global_name: discordUser.global_name,
+            avatarUrl,
+            decorationUrl
+          };
+          localStorage.setItem(VISITOR_CACHE_KEY, JSON.stringify(profile));
+          renderVisitorProfile(profile);
+          setMessage("Connected");
+          return;
+        } catch (error) {
+          console.warn("Could not load Discord profile:", error);
+          setMessage("Logged in, but Discord profile details could not be loaded.");
+        }
+      }
+
+      const metadata = authUser?.user_metadata || {};
+      const fallbackProfile = {
+        username: metadata.user_name || metadata.preferred_username || metadata.name || "Discord user",
+        global_name: metadata.full_name || metadata.name || "Discord user",
+        avatarUrl: metadata.avatar_url || metadata.picture || null
+      };
+      renderVisitorProfile(fallbackProfile);
+    }
+
+    accountTrigger.addEventListener("click", () => {
+      accountMenu.hidden = !accountMenu.hidden;
+      accountTrigger.setAttribute("aria-expanded", String(!accountMenu.hidden));
+    });
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".account-area")) {
+        accountMenu.hidden = true;
+        accountTrigger.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        localStorage.removeItem(VISITOR_CACHE_KEY);
+        renderLoggedOut();
+        return;
+      }
+      if (session?.user) void loadVisitorProfile(session.provider_token, session.user);
+      else renderLoggedOut();
+    });
+
+    loginButton.addEventListener("click", async () => {
+      loginButton.disabled = true;
+      loginButton.textContent = "Opening Discord...";
+      setMessage("Redirecting to Discord login...");
+      const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: "discord",
+        options: { scopes: "identify", redirectTo: "https://shiroows.run.place" }
+      });
+      if (error) {
+        setMessage(`Login failed: ${error.message}`);
+        loginButton.disabled = false;
+        loginButton.textContent = "Login with Discord";
+      }
+    });
+
+    copyOwnerProfileButton.addEventListener("click", async () => {
+      if (!currentVisitorProfile) return;
+      const ownerConfig = `const OWNER_PROFILE = ${JSON.stringify({
+        displayName: currentVisitorProfile.global_name || currentVisitorProfile.username || "Locally",
+        username: currentVisitorProfile.username || "",
+        avatarUrl: currentVisitorProfile.avatarUrl || "",
+        decorationUrl: currentVisitorProfile.decorationUrl || ""
+      }, null, 2)};`;
+      try {
+        await navigator.clipboard.writeText(ownerConfig);
+        setMessage("Profile config copied. Paste it over the OWNER_PROFILE block in your HTML file.");
+      } catch {
+        setMessage("Clipboard unavailable. Open the site over HTTPS and try again.");
+      }
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      logoutButton.disabled = true;
+      const { error } = await supabaseClient.auth.signOut();
+      logoutButton.disabled = false;
+      if (error) setMessage(`Logout failed: ${error.message}`);
+    });
+
+    // Render the owner's public profile separately from each visitor's login account.
+    try {
+      const savedOwner = localStorage.getItem(OWNER_CACHE_KEY);
+      renderOwnerProfile(savedOwner ? JSON.parse(savedOwner) : OWNER_PROFILE);
+    } catch {
+      renderOwnerProfile(OWNER_PROFILE);
+      localStorage.removeItem(OWNER_CACHE_KEY);
+    }
+
+    // Restore the visitor's account button while Supabase restores the auth session.
+    try {
+      const cachedVisitor = localStorage.getItem(VISITOR_CACHE_KEY);
+      if (cachedVisitor) renderVisitorProfile(JSON.parse(cachedVisitor));
+    } catch {
+      localStorage.removeItem(VISITOR_CACHE_KEY);
+    }
+  </script>
 </body>
 </html>
