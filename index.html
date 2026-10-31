@@ -158,7 +158,6 @@
       </div>
       <aside class="profile-card glass" aria-label="Website owner profile">
         <div class="avatar-wrap">
-          <div class="avatar" id="ownerAvatarFallback" aria-hidden="true">L.</div>
           <img class="discord-avatar" id="ownerDiscordAvatar" alt="Locally's Discord profile picture" hidden>
           <img class="discord-decoration" id="ownerDiscordDecoration" alt="" aria-hidden="true" hidden>
         </div>
@@ -245,16 +244,12 @@ const OWNER_PROFILE = {
       document.querySelector("#ownerDiscordHandle").textContent = profile.username ? `@${profile.username}` : "Website owner";
       const avatar = document.querySelector("#ownerDiscordAvatar");
       const decoration = document.querySelector("#ownerDiscordDecoration");
-      const fallback = document.querySelector("#ownerAvatarFallback");
       if (profile.avatarUrl) {
         avatar.src = profile.avatarUrl;
         avatar.hidden = false;
-        fallback.hidden = true;
       } else {
         avatar.hidden = true;
         avatar.removeAttribute("src");
-        fallback.textContent = displayName.slice(0, 1).toUpperCase();
-        fallback.hidden = false;
       }
       if (profile.decorationUrl) {
         decoration.src = profile.decorationUrl;
