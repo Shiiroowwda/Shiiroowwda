@@ -59,6 +59,7 @@
     .account-menu-name { font-weight:700; overflow-wrap:anywhere; }
     .account-menu-handle { color:var(--muted); font-size:.82rem; overflow-wrap:anywhere; margin:2px 0 12px; }
     .account-menu .btn { width:100%; }
+    .account-menu a.btn { text-decoration:none; }
     .account-message { font-size:.76rem; color:var(--muted); max-width:230px; overflow-wrap:anywhere; }
     .hero { padding: 100px 0 76px; display: grid; grid-template-columns: 1.35fr .65fr; gap: 34px; align-items: center; }
     .eyebrow { color: #93c5fd; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
@@ -124,7 +125,7 @@
       <a class="brand" href="#home">shiroows<span>.</span></a>
       <div class="nav-right">
         <div class="navlinks">
-          <a href="#home">Home</a><a href="#projects">Projects</a><a href="#about">About</a>
+          <a href="#home">Home</a><a href="#projects">Projects</a><a href="#dashboard">Dashboard</a><a href="#about">About</a>
         </div>
         <div class="account-area">
           <button class="btn primary account-login" id="discordLogin" type="button">Login with Discord</button>
@@ -134,6 +135,7 @@
           <div class="account-menu glass" id="accountMenu" hidden>
             <div class="account-menu-name" id="accountMenuName">Discord account</div>
             <div class="account-menu-handle" id="accountMenuHandle"></div>
+            <a class="btn" href="#accountSettings" id="settingsLink" style="width:100%;margin-bottom:8px">Account settings</a>
             <button class="btn" id="copyOwnerProfile" type="button">Show profile for website</button>
             <textarea id="ownerProfileOutput" readonly hidden rows="8" aria-label="Website owner profile data" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;background:#0b1220;color:#dbeafe;border:1px solid #334155;font-size:12px;resize:vertical;"></textarea>
             <p id="copyInstruction" hidden style="font-size:12px;color:#aabbd0;margin:6px 0 0;">Klik kotak teks, tekan Ctrl+A lalu Ctrl+C.</p>
@@ -179,6 +181,31 @@
       </div>
     </section>
 
+    <section id="dashboard">
+      <div class="section-head">
+        <div><div class="eyebrow">Shiroows services</div><h2>Dashboard</h2></div>
+        <p class="sub">Tools and services connected to this website.</p>
+      </div>
+      <div class="grid">
+        <article class="card glass">
+          <div class="icon">◉</div><h3>Bot Server Status</h3>
+          <p>Check availability and service status for Shiroows Discord bots. Live monitoring will be connected here later.</p>
+          <span class="tag">Coming soon</span>
+        </article>
+        <article class="card glass">
+          <div class="icon">✦</div><h3>Shiroows Premium</h3>
+          <p>Get early access to selected bots, premium commands, and additional features when the membership launches.</p>
+          <span class="tag">Coming soon</span><span class="tag">Planned benefits</span>
+        </article>
+        <article class="card glass" id="accountSettings">
+          <div class="icon">⚙</div><h3>Account Settings</h3>
+          <p>Manage your Discord session on this website. You can sign out from the account menu at the top right.</p>
+          <span class="tag">Discord login</span>
+          <p class="muted" style="margin-top:12px">More account preferences will be added later.</p>
+        </article>
+      </div>
+    </section>
+
     <section id="about">
       <div class="section-head"><div><div class="eyebrow">A little about me</div><h2>About</h2></div></div>
       <div class="about">
@@ -208,12 +235,15 @@
 
     // Public website-owner profile. Fill these values after signing in with your own Discord account.
     // Do not put any OAuth token, Client Secret, or Supabase secret key here.
-const OWNER_PROFILE = {
-  "displayName": "『Łocally』",
-  "username": ".locally.",
-  "avatarUrl": "https://cdn.discordapp.com/avatars/1347469355062919278/eeda8d58a95e5f81bcb74e338116dd44.png?size=128",
-  "decorationUrl": "https://cdn.discordapp.com/avatar-decoration-presets/a_c7d0b92c2c06bbb3fed297b34a51d5e5.png?size=256"
-};
+    const OWNER_PROFILE = {
+      displayName: "『Łocally』",
+      username: ".locally.",
+      avatarUrl: "https://cdn.discordapp.com/avatars/1347469355062919278/eeda8d58a95e5f81bcb74e338116dd44.png?size=128",
+      decorationUrl: "https://cdn.discordapp.com/avatar-decoration-presets/a_c7d0b92c2c06bbb3fed297b34a51d5e5.png?size=256"
+    };
+
+    // Only this Discord account can access the website-owner profile export.
+    const OWNER_DISCORD_ID = "1347469355062919278";
 
     // Replace only this value with your Supabase Publishable key (sb_publishable_...).
     const SUPABASE_URL = "https://woofpetixocdymxxstsc.supabase.co";
@@ -262,6 +292,10 @@ const OWNER_PROFILE = {
 
     function renderVisitorProfile(profile) {
       currentVisitorProfile = profile;
+      const isWebsiteOwner = String(profile.id || "") === OWNER_DISCORD_ID;
+      copyOwnerProfileButton.hidden = !isWebsiteOwner;
+      ownerProfileOutput.hidden = true;
+      copyInstruction.hidden = true;
       accountName.textContent = profile.global_name || profile.username || "Discord account";
       accountMenuName.textContent = profile.global_name || profile.username || "Discord account";
       accountMenuHandle.textContent = profile.username ? `@${profile.username}` : "Signed in with Discord";
@@ -320,6 +354,11 @@ const OWNER_PROFILE = {
       renderVisitorProfile(fallbackProfile);
     }
 
+    document.querySelector("#settingsLink")?.addEventListener("click", () => {
+      accountMenu.hidden = true;
+      accountTrigger.setAttribute("aria-expanded", "false");
+    });
+
     accountTrigger.addEventListener("click", () => {
       accountMenu.hidden = !accountMenu.hidden;
       accountTrigger.setAttribute("aria-expanded", String(!accountMenu.hidden));
@@ -357,6 +396,10 @@ const OWNER_PROFILE = {
     });
 
     copyOwnerProfileButton.addEventListener("click", () => {
+      if (!currentVisitorProfile || String(currentVisitorProfile.id || "") !== OWNER_DISCORD_ID) {
+        setMessage("This feature is only available to the website owner.");
+        return;
+      }
       if (!currentVisitorProfile) {
         setMessage("Discord profile is not available yet. Sign in again.");
         return;
