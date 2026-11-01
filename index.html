@@ -252,7 +252,7 @@
 
     // Public bot status endpoint. No bot token or private secret is used in the browser.
     const BOT_STATUS_API = "https://shiroows-api.ahdaismyname.workers.dev/bot-status";
-    const BOT_STATUS_REFRESH_MS = 30_000;
+    const BOT_STATUS_REFRESH_MS = 60_000;
     const botStatusIndicator = document.querySelector("#botStatusIndicator");
     const botStatusLabel = document.querySelector("#botStatusLabel");
     const botLastSeen = document.querySelector("#botLastSeen");
@@ -332,7 +332,7 @@
 
     // Replace only this value with your Supabase Publishable key (sb_publishable_...).
     const SUPABASE_URL = "https://woofpetixocdymxxstsc.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_UsIMS36vcOT8T2lWjpqVhQ_bhGZliud";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     const loginButton = document.querySelector("#discordLogin");
