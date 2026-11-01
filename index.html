@@ -386,7 +386,7 @@
       setMessage("Redirecting to Discord login...");
       const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: "discord",
-        options: { scopes: "identify", redirectTo: "https://shiroows.run.place" }
+        options: { scopes: "identify", redirectTo: "http://shiroows.run.place" }
       });
       if (error) {
         setMessage(`Login failed: ${error.message}`);
